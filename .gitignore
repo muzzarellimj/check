@@ -14,3 +14,6 @@ package-lock.json
 
 # .env environmental variable configuration file
 *.env
+
+# macos storage attribute file
+*.DS_Store

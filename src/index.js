@@ -354,5 +354,42 @@ app.delete('/api/unregister/:id', (req, res) => {
 	}
 })
 
+app.get("/tags", function (req, resp) {
+	database.collection("tags")
+		.find()
+		.toArray(function (error, res) {
+			//   console.log(res);
+			resp.render("tags.ejs", { tags: res });
+		});
+});
+
+app.post("/tags/add", function (req, resp) {
+	console.log(req.body);
+
+	database.collection("tags").insertOne(
+		{name: req.body.name},
+		function (error, res) {
+			if (error) {
+				return console.log(error);
+			}
+			resp.send({id: res.insertedId.toString(), name: req.body.name});
+		}
+	);
+});
+
+app.delete("/tags/delete", function (req, resp) {
+	//   req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
+	console.log(req.body._id);
+	database.collection("tags").deleteOne(
+		{ _id: `${req.body._id}` },
+		function (error, res) {
+			if (error) {
+				return console.log(error);
+			}
+			resp.send("success");
+		}
+	);
+});
+
 // Export for testing
 module.exports = { app }

@@ -1,0 +1,16 @@
+# directory-based project configuration
+.idea/
+
+# file-based project configuration
+*.iws
+*.iml
+*.ipr
+
+# generated node_modules directory
+node_modules/
+
+# generated via package.json
+package-lock.json
+
+# .env environmental variable configuration file
+*.env

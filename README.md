@@ -54,3 +54,16 @@ wrong.
 #### Un-registration at `/unregister/:id`
 
 This is similar to `/api/unregister/:id`, except the server responses by rendering ejs and display information/ error.
+
+### Item Searching
+
+#### Search at `/search/:query`
+
+The search API can be used via the search bar or by `/search/:query`, replacing `:query` with your query string. If the
+query string is contains spaces when using /search/:query replace the spaces with dashes. This search API does not do
+keyword search functions it will search for the whole string entered. If nothing matches your query, it will show the
+nav bar with nothing else. You can delete from this list, and it will affect the entire list. the search API uses
+`list.ejs` to display the list of results.
+
+The search bar sends a GET to `/search` holding string q. The `/search` module formats q properly and then redirects to 
+`/search/:query`, where `:query` is replaced with the properly formatted q.

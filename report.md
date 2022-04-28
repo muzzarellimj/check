@@ -1,9 +1,49 @@
-# Check: Project Report
+# Check: Status Report
 
-## Executive Summary
+## Summary
 
-The Check application is a simple to-do list application that provides a web application interface meant to create,
-edit, and delete to-do list items. Check is built with [Node.js](https://nodejs.dev/) and utilises [Express](https://expressjs.com/)
-and [MongoDB](https://www.mongodb.com/), among other libraries. Along with standard to-do list features, Check 
-encourages the registration of users, tagging of checklist items for better organisation, searching of all checklist 
-items, and the exporting of a checklist to Markdown, XML, and YAML.
+Check is a lightweight to-do list web application built to simplify the creation and management of lists and the items
+within them. Standard to-do list applications often hold two major disadvantages: (1) lists cannot be exported and must 
+remain within a potentially limited space, and (2) items within these lists are difficult to find when lists become too
+long. Check aims to combat these disadvantages by providing the ability to (1) export lists in popular file formats, and
+(2) curate items within a list by creating distinct user profiles, tagging items with keywords, and searching through
+all items to display only those that match a query. Check is meant to be lightweight client-side and scalable to support
+a variety of features as the need arises.
+
+## Rules and Tools
+
+Check was developed in [Node.js](https://nodejs.dev/) with both [Microsoft Visual Studio Code](https://code.visualstudio.com/) 
+and [JetBrains WebStorm](https://www.jetbrains.com/webstorm/). A primary repository was published [here](https://github.com/muzzarellimj/check),
+and local changes were managed via forking this repository and creating pull requests. Our team chose [Discord](https://discord.com/)
+as a communication source and [Asana](https://asana.com/) as the project management application to track milestones and
+deadlines. This project was built atop the golden rule of software engineering, keep it simple and stupid, and focused
+on that principle as we employed the following rules:
+
+- Divide and conquer - each team member was responsible for an independent, decoupled, single-responsibility module, and
+  joint contributions (navigation, report, etc.) were appropriately divided among the team.
+- No Silver Bullet (NSB) law - due to preference and capability, no IDE would be effective for the entire group; as 
+  such, our team leaned into GitHub and IDE extensions to unify our workflow.
+- Vertical slice rule - the base application and each feature were developed over a number of commits, each working to
+  solve (and remove, if applicable) issues and better improve function and design.
+
+## Features and Contributions
+
+Our features were chosen with the goal of solving a problem and/or managing the complexity that a standard to-do list 
+application may provide. While the features were initially designed and written individually, they were improved and 
+debugged in a joint effort, be it by manually committing the changes (with author approval) or assisting with changes
+through effective research and communication.
+
+### Checklist Conversion via Michael Muzzarelli
+
+There is a benefit to using our checklist web application, but to access data more freely in a local, non-web-based 
+environment, conversion to a separate file format may be necessary. For printing or viewing in a text editor, [Markdown](https://en.wikipedia.org/wiki/Markdown) 
+may be best. For input in another application, [XML](https://en.wikipedia.org/wiki/XML) or [YAML](https://en.wikipedia.org/wiki/YAML) 
+may be best. All checklist items will be formatted in the chosen file format and be presented with a file that can be
+printed, downloaded, or copied into another application.
+
+## Conclusion
+
+Check is a simple application that I believe, with the proper time and resources, could become enriched by a variety of 
+features including a more robust user interface, support for a mobile environment, and better management of checklist 
+items through targeted suggestions within distinct user profiles and the ability to view a set of related items without
+searching or viewing by tag.

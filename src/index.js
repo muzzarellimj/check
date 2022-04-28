@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING, { useNewUrlParser: true 
 
 // This should come first before bodyParser
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
@@ -224,8 +224,8 @@ app.get('/convert/yaml', (request, response) => {
 });
 
 app.get('/register', (req, res) => {
-	res.render('register.ejs')
-})
+	res.render('register.ejs', { success: false })
+});
 
 app.post('/register', (req, res) => {
 	try {

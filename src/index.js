@@ -11,6 +11,7 @@ const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const { morganChalk } = require('./utils/logger')
 const URL = `http://localhost:5500`
+const ObjectId = require('mongodb').ObjectID;
 
 require('dotenv').config();
 
@@ -381,7 +382,7 @@ app.delete("/tags/delete", function (req, resp) {
 	//   req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
 	console.log(req.body._id);
 	database.collection("tags").deleteOne(
-		{ _id: `${req.body._id}` },
+		{ _id: ObjectId(`${req.body._id}`) },
 		function (error, res) {
 			if (error) {
 				return console.log(error);

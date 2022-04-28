@@ -13,34 +13,57 @@
 	<body>
 		<%- include('nav.html') %>
 
-		<ul class="list-group">
-			<% for (var i = 0; i < posts.length; i++){ %>
-				<li class="list-group-item">
-					<h4>Title : <%= posts[i].title %></h4>
-					<p>Date : <%= posts[i].date %></p>
-					<button class="btn btn-sm btn-danger delete" data-id="<%= posts[i]._id %>">Delete</button>
-				</li>
-			<% } %>
-		</ul>
+		<div class="container py-5">
+			<div class="row mb-3">
+				<div class="col-12 text-center">
+					<h3>Checklist</h3>
+				</div>
+			</div>
+
+			<div class="row row-cols-1 justify-content-center g-3">
+				<% posts.forEach(post => { %>
+					<div id="item-<%= post._id %>" class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+						<div class="card">
+							<div class="card-body text-center">
+								<h5 class="card-title"><%= post.title %></h5>
+								<p class="card-text">Due on <%= post.date %></p>
+
+								<div class="row">
+									<div class="col-6">
+										<form action="/edit/<%= post._id %>" method="GET">
+											<button type="submit" class="btn btn-sm btn-primary edit w-100">Edit</button>
+										</form>
+									</div>
+
+									<div class="col-6">
+										<button class="btn btn-sm btn-danger delete w-100" data-id="<%= post._id %>">Delete</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<% }); %>
+			</div>
+		</div>
 
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 		<script>
-			$(".delete").click(function (e) {
+			$('.delete').click((event) => {
 				$.ajax({
-						method: "DELETE",
-						url: "/delete",
-						data: {_id: e.target.dataset.id},
-					})
+					method: "DELETE",
+					url: "/delete",
+					data: { _id: event.target.dataset.id },
+				})
 
-					.done(() => {
-						$(this).parent("li").fadeOut();
-					})
+				.done(() => {
+					$(`#item-${event.target.dataset.id}`).fadeOut();
+				})
 
-					.fail(error => {
-						if (error) console.log(error);
-					});
+				.fail(error => {
+					if (error) return console.log(error);
+				});
 			});
 		</script>
 	</body>

@@ -116,3 +116,40 @@ app.put('/edit', (request, response) => {
 		response.redirect('/list');
 	});
 });
+//searches a query. Quentin Roa
+app.get('/search/:query',(request,response)=>{
+	nodash=request.params.query.replaceAll('-', ' ');
+	//regex with query that is case insensitive.
+	var regex = new RegExp(nodash,'i')
+	query = { title :  regex};
+	const proj = {_id: 0,title: 1,};
+    found=database.collection('post').find(query).project(proj).toArray((error,result)=>{
+        if(error) return console.log(error)
+
+        response.render('list', { posts: result });
+
+    })
+})
+//sends get as query. Quentin Roa
+app.get('/search',(request,response)=>{
+	q=request.query.q
+	q=q.replaceAll(' ','-')
+	response.redirect('/search/'+q)
+})
+//use to test search, when ran, it will create a post with nothing as date and the query as the title. Quentin Roa
+app.get('/test/search/:query',(request,response)=>{
+	title=request.params.query
+	database.collection('counter').findOne({ name: 'Total Post' }, (error, findResponse) => {
+		let totalPost = findResponse.totalPost;
+
+		database.collection('post').insertOne({ _id: totalPost + 1, title: title, date: '0/0/0' }, (error) => {
+			if (error) return console.log(error);
+			title=title.replaceAll(' ','-')
+			database.collection('counter').updateOne({ name: 'Total Post' }, { $inc: { totalPost: 1 } }, (error) => {
+				if (error) return console.log(error);
+
+				response.redirect('/search/'+title)
+			});
+		});
+	});	
+})

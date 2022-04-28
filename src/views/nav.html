@@ -10,6 +10,20 @@
 			<ul class="navbar-nav ms-auto">
 				<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
 				<li class="nav-item"><a class="nav-link" href="/list">List</a></li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="convert-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						Convert
+					</a>
+
+					<ul class="dropdown-menu dropdown-menu-end text-end" aria-labelledby="convert-dropdown" style="min-width: 17.5rem">
+						<li><p class="m-0 ps-3 pe-4 py-1 text-muted small">To convert your checklist, select a format, right-click the loaded page, and select 'Save as...' to download.</p></li>
+						<li><hr class="dropdown-divider"></li>
+						<li class="px-2"><a class="dropdown-item rounded" href="/convert/markdown">Markdown</a></li>
+						<li class="px-2"><a class="dropdown-item rounded" href="/convert/xml">XML</a></li>
+						<li class="px-2"><a class="dropdown-item rounded" href="/convert/yaml">YAML</a></li>
+					</ul>
+				</li>
 			</ul>
 		</div>
 	</div>

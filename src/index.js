@@ -3,6 +3,11 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const User = require('./models/User')
+const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
+const { morganChalk } = require('./utils/logger')
+const URL = `http://localhost:5500`
 
 require('dotenv').config();
 
@@ -14,7 +19,14 @@ MongoClient.connect(process.env.MONGODB_CONNECTION_STRING, { useUnifiedTopology:
 	database = client.db('main');
 });
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// Mongoose connect to database
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING, { useNewUrlParser: true })
+	.then(() => console.log('MongoDB Connected...'))
+	.catch(() => console.log('Error: Cannot connect to database'))
+
+// This should come first before bodyParser
+app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
@@ -22,6 +34,9 @@ app.set('views', 'src/views/');
 
 app.use('/public', express.static('public'));
 app.use(methodOverride('_method'));
+
+// Logging middileware
+app.use(morganChalk)
 
 app.listen(process.env.PORT, () => {
 	console.log('Checklist application listening on port ' + process.env.PORT);
@@ -116,3 +131,137 @@ app.put('/edit', (request, response) => {
 		response.redirect('/list');
 	});
 });
+
+app.get('/register', (req, res) => {
+	res.render('register.ejs')
+})
+
+app.post('/register', (req, res) => {
+	try {
+		const { firstName, lastName, email, password } = req.body
+		User.findOne({ email: email })
+			.then(user => {
+				if (user) {
+					return res.status(400).render('error', { message: 'Email is already registered. Please choose another email.', redirectUrl: `${URL}/register` })
+				} else {
+					const newUser = new User({
+						firstName, 
+						lastName, 
+						email
+					})
+					bcrypt.genSalt(10, (_, salt) => {
+						bcrypt.hash(password, salt, (error, hashedPassword) => {
+							if (error) {
+								return res.status(500).render('error', { message: 'Something is not right. Please try again', redirectUrl: `${URL}/register` })
+							}
+							newUser.password = hashedPassword
+							newUser.save()
+								.then(user => {
+									return res.render('register', {
+										success: true,
+										data: {
+											_id: user._id,
+											firstName: user.firstName,
+											lastName: user.lastName,
+											email: user.email
+										},
+										message: "You are now registered",
+										code: "Created"
+									})
+								})
+								.catch(error => res.status(500).render('error', { message: 'Something is not right. Please try again', redirectUrl: `${URL}/register` }))
+						})
+					})
+				}
+			})
+	}
+	catch (error) {
+		return res.status(500).render('error', { message: 'Something is not right. Please try again', redirectUrl: `${URL}/register` })
+	}
+})
+
+app.post('/api/register', (req, res) => {
+	try {
+		const { firstName, lastName, email, password } = req.body
+		User.findOne({ email: email })
+			.then(user => {
+				if (user) {
+					return res.status(400).json({ message: 'Email is already registered. Please choose another email', code: "BadRequest"})
+				} else {
+					const newUser = new User({
+						firstName, 
+						lastName, 
+						email
+					})
+					bcrypt.genSalt(10, (_, salt) => {
+						bcrypt.hash(password, salt, (error, hashedPassword) => {
+							if (error) {
+								return res.status(500).json({ message: "Something is not right. Please try again", code: "InternalServerError", error: error })
+							}
+							newUser.password = hashedPassword
+							newUser.save()
+								.then(user => {
+									res.status(201).json({
+										success: true,
+										data: {
+											_id: user._id,
+											firstName: user.firstName,
+											lastName: user.lastName,
+											email: user.email
+										},
+										message: "You are now registered",
+										code: "Created"
+									})
+								})
+								.catch(error => res.status(500).json({ message: 'Something is not right. Please try again', code: 'InternalServerError', error: error }))
+						})
+					})
+				}
+			})
+		
+	}
+	catch (error) {
+		return res.status(500).json({ message: 'Something is not right. Please try again', code: 'InternalServerError', error: error })
+	}
+})
+
+app.delete('/unregister/:id', (req, res) => {
+	try {
+		const _id = req.params.id
+		User.findOne({ _id: _id })
+			.then(user => {
+				if (!user) {
+					res.status(400).render('error', { message: 'Cannot find user with this id in database.', redirectUrl: `${URL}/` })
+				} else {
+					User.deleteOne({ _id: _id})
+						.then(() => res.status(204).redirect('/'))
+						.catch(error => res.status(500).render('error', { message: 'Something is not right. Please try again', redirectUrl: `${URL}/` }))
+				}
+			})
+	}
+	catch (error) {
+		return res.status(500).render('error', { message: 'Something is not right. Please try again', redirectUrl: `${URL}/` })
+	}
+})
+
+app.delete('/api/unregister/:id', (req, res) => {
+	try {
+		const _id = req.params.id
+		User.findOne({ _id: _id })
+			.then(user => {
+				if (!user) {
+					return res.status(400).json({ message: 'Cannot find user with this id in database', code: 'BadRequest' })
+				} else {
+					User.deleteOne({ _id: _id})
+						.then(() => res.status(204).json({ message: 'User is successfully deleted from database', code: 'NoContent'}))
+						.catch(error => res.status(500).json({ message: 'Something is not right. Please try again', code: 'InternalServerError', error: error }))
+				}
+			})
+	}
+	catch (error) {
+		return res.status(500).json({ message: 'Something is not right. Please try again', code: 'InternalServerError', error: error })
+	}
+})
+
+// Export for testing
+module.exports = { app }

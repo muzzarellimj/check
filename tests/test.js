@@ -3,6 +3,10 @@ const request = require("supertest");
 
 const toBeDeleted = [];
 
+// NOTE: due to the downloading of files and dynamic content within the checklists, testing the conversion feature would
+// have been difficult with mocha or jest. as such, files were downloaded and validated in WebStorm to ensure they were
+// formatted properly. a sample file of each format is included within this directory.
+
 describe("Test register API", () => {
   describe("POST /api/register", () => {
     it("Should create a new user and save into database", (done) => {

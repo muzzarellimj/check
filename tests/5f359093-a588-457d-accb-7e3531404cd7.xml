@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+    <post id="1">
+        <title>Finish ASE team project</title>
+        <date>April 29, 2022</date>
+        <tags>
+            <tag>ase</tag>
+            <tag>team project</tag>
+        </tags>
+    </post>
+    <post id="2">
+        <title>Another ASE task</title>
+        <date>0</date>
+        <tags/>
+    </post>
+    <post id="3">
+        <title>fe</title>
+        <date>fe</date>
+        <tags>
+            <tag>123</tag>
+        </tags>
+    </post>
+</list>

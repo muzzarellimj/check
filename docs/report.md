@@ -41,6 +41,12 @@ may be best. For input in another application, [XML](https://en.wikipedia.org/wi
 may be best. All checklist items will be formatted in the chosen file format and be presented with a file that can be
 printed, downloaded, or copied into another application.
 
+### Registration via Trung Cao
+
+As users use and interact with our Check app, it is essential for users to have registration and un-registration for
+accounts feature as users can create their own tasks, see a list of tasks, modify tasks, and delete tasks as they wish.
+Users can also decide to delete their account if they no longer want to use the Check app.
+
 ### Searching via Quentin Roa
 
 The search api uses the /search/:query and /search modules to allow for search functionality. :query is where you put

@@ -557,5 +557,46 @@ app.delete("/tags/delete", function (req, resp) {
 		);
 });
 
+//tag adding testing
+app.get("/test/tags/add", function (req, resp) {
+  //insert a demo item with tags into db
+  var title = "demo";
+  var date = "1/1";
+  var tags = ["nghitran", "ase"];
+  database
+    .collection("counter")
+    .findOne({ name: "Total Post" }, (error, findResponse) => {
+      let totalPost = findResponse.totalPost;
+      database.collection("post").insertOne(
+        {
+          _id: totalPost + 1,
+          title: title,
+          date: date,
+          tags: tags,
+        },
+        (error) => {
+          if (error) return console.log(error);
+
+          database
+            .collection("counter")
+            .updateOne(
+              { name: "Total Post" },
+              { $inc: { totalPost: 1 } },
+              (error) => {
+                if (error) return console.log(error);
+                //check if there exists an item that contain the inserted tags
+                database
+                  .collection("post")
+                  .find({ tags: { $all: tags } })
+                  .toArray(function (err, res) {
+                    resp.send(res);
+                  });
+              }
+            );
+        }
+      );
+    });
+});
+
 // Export for testing
 module.exports = {app};

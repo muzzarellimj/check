@@ -1,133 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8"/>
+	<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+	/>
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
+	<!-- Bootstrap CSS -->
+	<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+			integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+			crossorigin="anonymous"
+	/>
 
-    <title>Document</title>
-  </head>
+	<title>Document</title>
+</head>
 
-  <body>
-    <%- include('nav.html') %> <% var tagSet = new Set(); posts.forEach(post =>
-    { if (post.tags.length > 0) { post.tags.forEach(tag => { if
-    (tagSet.has(tag)){ return } tagSet.add(tag); }) } }); var tagArr =
-    Array.from(tagSet); %>
-    <div class="container mt-4">
-      <div class="row">
-        <div class="col-12">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Tag</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <% tagArr.forEach(tag => { %>
+<body>
+<%- include('nav.html') %>
+<% var tagSet = new Set(); posts.forEach(post => {
+	if (post.tags.length > 0) {
+		post.tags.forEach(tag => {
+			if
+			(tagSet.has(tag)) {
+				return
+			}
+			tagSet.add(tag);
+		})
+	}
+}); var tagArr =
+		Array.from(tagSet); %>
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-12">
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th scope="col">Tag</th>
+					<th scope="col"></th>
+				</tr>
+				</thead>
+				<tbody>
+				<% tagArr.forEach(tag => { %>
 
-              <tr>
-                <th scope="row">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input flexCheckDefault"
-                      type="checkbox"
-                      value="<%= tag %>"
-                    />
-                    <label class="form-check-label" for="flexCheckDefault">
-                      <%= tag %>
-                    </label>
-                  </div>
-                </th>
-                <th class="">
-                  <button
-                    data-name="<%= tag %>"
-                    type="button"
-                    class="btn btn-dark delete"
-                  >
-                    Delete
-                  </button>
-                </th>
-              </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <button
-        type="button"
-        style="visibility: hidden"
-        class="btn btn-light border border-dark search"
-      >
-        Search Post(s)
-      </button>
-    </div>
+					<tr>
+						<th scope="row">
+							<div class="form-check">
+								<input
+										class="form-check-input flexCheckDefault"
+										type="checkbox"
+										value="<%= tag %>"
+								/>
+								<label class="form-check-label" for="flexCheckDefault">
+									<%= tag %>
+								</label>
+							</div>
+						</th>
+						<th class="">
+							<button
+									data-name="<%= tag %>"
+									type="button"
+									class="btn btn-dark delete"
+							>
+								Delete
+							</button>
+						</th>
+					</tr>
+				<% }) %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<button
+			type="button"
+			style="visibility: hidden"
+			class="btn btn-light border border-dark search"
+	>
+		Search Post(s)
+	</button>
+</div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-      var tagsSet = new Set();
-      $(".flexCheckDefault").change(function () {
-        if (this.checked) {
-          tagsSet.add($(this).val());
-        } else {
-          tagsSet.delete($(this).val());
-        }
-        console.log(Array.from(tagsSet));
-        console.log(tagsSet.size);
-        if (tagsSet.size != 0) {
-          $(".search").css("visibility", "visible");
-        } else {
-          $(".search").css("visibility", "hidden");
-        }
-      });
-      $(".search").click(function () {
-        var tags = Array.from(tagsSet);
-        console.log(tags);
-        window.location.href = `/list/${tags}`;
-      });
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+	var tagsSet = new Set();
+	$(".flexCheckDefault").change(function () {
+		if (this.checked) {
+			tagsSet.add($(this).val());
+		} else {
+			tagsSet.delete($(this).val());
+		}
+		console.log(Array.from(tagsSet));
+		console.log(tagsSet.size);
+		if (tagsSet.size != 0) {
+			$(".search").css("visibility", "visible");
+		} else {
+			$(".search").css("visibility", "hidden");
+		}
+	});
+	$(".search").click(function () {
+		var tags = Array.from(tagsSet);
+		console.log(tags);
+		window.location.href = `/list/${tags}`;
+	});
 
-      $(".delete").click(function (e) {
-        console.log($(this));
-        console.log($(this).parent("th"));
-        $.ajax({
-          method: "DELETE",
-          url: "/tags/delete",
-          // dataset.id is from: data-id= posts[i]._id
-          data: { name: e.target.dataset.name },
-        })
-          .done((res) => {
-            // we need this form to use $this
-            $(this).parent("th").parent("tr").fadeOut();
-            console.log("killed");
-          })
-          .fail((xhr, code, err) => {
-            // failure
-          });
-      });
-    </script>
+	$(".delete").click(function (e) {
+		console.log($(this));
+		console.log($(this).parent("th"));
+		$.ajax({
+				method: "DELETE",
+				url: "/tags/delete",
+				// dataset.id is from: data-id= posts[i]._id
+				data: {name: e.target.dataset.name},
+			})
+			.done((res) => {
+				// we need this form to use $this
+				$(this).parent("th").parent("tr").fadeOut();
+				console.log("killed");
+			})
+			.fail((xhr, code, err) => {
+				// failure
+			});
+	});
+</script>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"
+></script>
+<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"
+></script>
+</body>
 </html>

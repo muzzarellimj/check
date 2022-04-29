@@ -12,6 +12,8 @@ const mongoose = require("mongoose");
 const {morganChalk} = require("./utils/logger");
 const URL = `http://localhost:5500`;
 const ObjectId = require("mongodb").ObjectID;
+const { writeFileSync, unlinkSync } = require('fs');
+const { v4: generateUniqueId } = require('uuid');
 
 require("dotenv").config();
 
@@ -251,15 +253,22 @@ app.get("/convert/markdown", (request, response) => {
 			let postList = [];
 
 			posts.forEach((post) => {
-				postList.push(`${post.title} - due on ${post.date}`);
+				postList.push(`${post.title} - due on ${post.date} - includes the following tags:`);
+				postList.push(post.tags);
+				postList.push(' ');
 			});
 
 			data.push(postList);
 
-			response.format({
-				"text/markdown": () => {
-					response.send(toMarkdown(data, null, null));
-				},
+			let path = 'public/'
+			let filename = `${generateUniqueId()}.md`;
+
+			writeFileSync(path + filename, toMarkdown(data, null, null));
+
+			response.download(path + filename, (error) => {
+				if (error) return console.log(error);
+
+				unlinkSync(path + filename);
 			});
 		});
 });
@@ -269,20 +278,38 @@ app.get("/convert/xml", (request, response) => {
 		.collection("post")
 		.find()
 		.toArray((error, posts) => {
-			let data = [];
-
-			data.push("<checklist>");
+			let inner = [];
 
 			posts.forEach((post) => {
-				data.push({post: {title: post.title, date: post.date}});
+				inner.push({
+					_name: 'post',
+					_content: {
+						title: post.title,
+						date: post.date,
+						tags: {
+							tag: post.tags
+						}
+					},
+					_attrs: {
+						id: post._id
+					}
+				});
 			});
 
-			data.push("</checklist>");
+			let outer = {
+				_name: 'list',
+				_content: inner
+			}
 
-			response.format({
-				"application/xml": () => {
-					response.send(toXML.toXML(data, {indent: "    ", header: true}));
-				},
+			let path = 'public/'
+			let filename = `${generateUniqueId()}.xml`;
+
+			writeFileSync(path + filename, toXML.toXML(outer, { indent: "    ", header: true }));
+
+			response.download(path + filename, (error) => {
+				if (error) return console.log(error);
+
+				unlinkSync(path + filename);
 			});
 		});
 });
@@ -298,10 +325,15 @@ app.get("/convert/yaml", (request, response) => {
 				data.push({post: {title: post.title, date: post.date}});
 			});
 
-			response.format({
-				"text/yaml": () => {
-					response.send(toYAML.stringify(data));
-				},
+			let path = 'public/'
+			let filename = `${generateUniqueId()}.yaml`;
+
+			writeFileSync(path + filename, toYAML.stringify(data));
+
+			response.download(path + filename, (error) => {
+				if (error) return console.log(error);
+
+				unlinkSync(path + filename);
 			});
 		});
 });

@@ -50,6 +50,18 @@ array to list.ejs to display the results of the query. /search catches a get req
 then redirects it to /search/:query. You can actually use either when using the url, to format for /search it would be
 /search?q=query. You would replace query with what you would like to search using plus signs as spaces.
 
+### Tagging via Nghi Tran
+
+Tagging feature is used to provide tag for any item. Tagging helps to describe what the to-do task is about and make it
+easy to locate. Tagging feature is chosen instead of category is because user usually finds it easier to assign tags to
+their scans instead of looking for it under a specific category. For example, when user want to look for his/her dog
+Dusty's vaccination appointment in to-do list, user probably does not know under which category it belongs (dog? Dusty?
+vaccination? appointment?), but tags correspond to all the words users can look up to find it: vet, dog, dusty, pet, and
+vaccinate.
+
+In this web app, users will be able to identify items more easily by filtering the search with a tag or combination of
+tags. In addition, users will be able to add, update, delete tags for any to-do item.
+
 ## Conclusion
 
 Check is a simple application that I believe, with the proper time and resources, could become enriched by a variety of 

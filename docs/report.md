@@ -41,6 +41,15 @@ may be best. For input in another application, [XML](https://en.wikipedia.org/wi
 may be best. All checklist items will be formatted in the chosen file format and be presented with a file that can be
 printed, downloaded, or copied into another application.
 
+### Searching via Quentin Roa
+
+The search api uses the /search/:query and /search modules to allow for search functionality. :query is where you put
+what you want to search, using dashes as spaces. /search/:query takes the :query string, replaces the dashes with
+spaces, then queries the mongodb atlas database to return an array of todo list cards. /search/:query then sends the
+array to list.ejs to display the results of the query. /search catches a get request and properly formats the request
+then redirects it to /search/:query. You can actually use either when using the url, to format for /search it would be
+/search?q=query. You would replace query with what you would like to search using plus signs as spaces.
+
 ## Conclusion
 
 Check is a simple application that I believe, with the proper time and resources, could become enriched by a variety of 
